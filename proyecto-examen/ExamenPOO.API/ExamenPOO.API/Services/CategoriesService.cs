@@ -11,12 +11,12 @@ namespace ExamenPOO.API.Services
 		// **** Manejo del archivo JSON ****
 
 		public readonly string _JSON_FILE;
-		//public readonly string _JSON_FILE_PRODUCTS;
+		public readonly string _JSON_FILE_PRODUCTS;
 
 		public CategoriesService()
 		{
 			_JSON_FILE = "SeedData/categories.json";
-			//_JSON_FILE_PRODUCTS = "SeedData/products.json";
+			_JSON_FILE_PRODUCTS = "SeedData/products.json";
 		}
 
 		// Leer el archivo JSON
@@ -35,6 +35,30 @@ namespace ExamenPOO.API.Services
 			{
 				Id = c.Id,
 				Name = c.Name,
+				InventoryValue = c.InventoryValue,
+			}).ToList();
+
+			return dtos;
+		}
+
+		private async Task<List<ProductDto>> ReadProductsFromFileAsync() // Leer los productos
+		{
+			if (!File.Exists(_JSON_FILE_PRODUCTS))
+			{
+				return new List<ProductDto>();
+			}
+
+			var json = await File.ReadAllTextAsync(_JSON_FILE_PRODUCTS);
+			var products = JsonConvert.DeserializeObject<List<ProductEntity>>(json);
+
+			// Convertir la lista de ProductEntity a una lista de ProductDto
+			var dtos = products.Select(p => new ProductDto
+			{
+				Id = p.Id,
+				Name = p.Name,
+				Price = p.Price,
+				Amount = p.Amount,
+				Category = p.Category,
 			}).ToList();
 
 			return dtos;
@@ -53,15 +77,24 @@ namespace ExamenPOO.API.Services
 
 		// **** Metodos del CRUD ****
 
-		// Calcular el valor de inventario (InventoryValue)
-		private void InventoryValue(ProductDto productDto)
+		// Extraer el Price y Amount del _JSON_FILE_PRODUCTS para calcular el InventoryValue
+		public async Task<CategoryDto> CalculateInventoryValue(CategoryDto categoryDto)
 		{
-			// Logica para calcular el inventario
+			var productsDtos = await ReadProductsFromFileAsync();
+			foreach (var product in productsDtos)
+			{
+				if (product.Category == categoryDto.Name)
+				{
+					categoryDto.InventoryValue += product.Price * product.Amount;
+				}
+			}
+			return categoryDto;
 		}
 
-		public async Task<List<CategoryDto>> GetCategoriesAsync()
+		public async Task<List<CategoryDto>> GetCategoriesAsync(/*CategoryDto dto*/)
 		{
-			return await ReadCategoriesFromFileAsync();
+			//CalculateInventoryValue(dto);
+			return await ReadCategoriesFromFileAsync();	
 		}
 
 		public async Task<CategoryDto> GetCategoryByIdAsync(Guid id)
@@ -80,6 +113,17 @@ namespace ExamenPOO.API.Services
 				Name = dto.Name,
 			};
 
+			//// Extraer el Price y Amount del _JSON_FILE_PRODUCTS para calcular el InventoryValue
+			//var productsDtos = await ReadProductsFromFileAsync();
+			//foreach (var product in productsDtos)
+			//{
+			//	if (product.Category == categoryDto.Name)
+			//	{
+			//		categoryDto.InventoryValue += product.Price * product.Amount;
+			//	}
+			//}
+			CalculateInventoryValue(categoryDto);
+
 			categoriesDtos.Add(categoryDto);
 
 			// Pasar de CategoryDto a CategoryEntity
@@ -87,6 +131,7 @@ namespace ExamenPOO.API.Services
 			{
 				Id = x.Id,
 				Name = x.Name,
+				InventoryValue = x.InventoryValue,
 			}).ToList();
 
 			await WriteCategoriesToFileAsync(categories);
@@ -116,6 +161,7 @@ namespace ExamenPOO.API.Services
 			{
 				Id = x.Id,
 				Name = x.Name,
+				InventoryValue = x.InventoryValue,
 			}).ToList();
 
 			await WriteCategoriesToFileAsync(categories);
@@ -139,6 +185,7 @@ namespace ExamenPOO.API.Services
 			{
 				Id = x.Id,
 				Name = x.Name,
+				InventoryValue = x.InventoryValue,
 			}).ToList();
 
 			await WriteCategoriesToFileAsync(categories);

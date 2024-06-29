@@ -7,10 +7,24 @@
     "Name": "Pantalon"
   },
   {
-    "Price": 200,
+    "Price": 600,
     "Amount": 5,
     "Category": "Vestimenta",
     "Id": "5753c035-6ed6-4130-b8f9-f028e3538f38",
     "Name": "Camiseta"
+  },
+  {
+    "Price": 800,
+    "Amount": 1,
+    "Category": "Vestimenta",
+    "Id": "378d01f9-725b-4df6-a1fc-0a75a90a89fe",
+    "Name": "Zapatos"
+  },
+  {
+    "Price": 100,
+    "Amount": 3,
+    "Category": "Vestimenta",
+    "Id": "723e00ba-3416-4994-a831-a6f8b1a35737",
+    "Name": "Guantes"
   }
 ]

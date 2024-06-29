@@ -4,7 +4,7 @@ namespace ExamenPOO.API.Services.Interfaces
 {
 	public interface ICategoriesService
 	{
-		Task<List<CategoryDto>> GetCategoriesAsync();
+		Task<List<CategoryDto>> GetCategoriesAsync(/*CategoryDto dto*/);
 		Task<CategoryDto> GetCategoryByIdAsync(Guid id);
 		Task<bool> CreateAsync(CategoryCreateDto dto);
 		Task<bool> EditAsync(CategoryEditDto dto, Guid id);

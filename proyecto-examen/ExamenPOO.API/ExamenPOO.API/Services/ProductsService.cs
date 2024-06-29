@@ -11,12 +11,12 @@ namespace ExamenPOO.API.Services
 		// **** Manejo del archivo JSON ****
 
 		public readonly string _JSON_FILE;
-		//public readonly string _JSON_FILE_CATEGORIES;
+		public readonly string _JSON_FILE_CATEGORIES;
 
 		public ProductsService()
 		{
 			_JSON_FILE = "SeedData/products.json";
-			//_JSON_FILE_CATEGORIES = "SeedData/categories.json";
+			_JSON_FILE_CATEGORIES = "SeedData/categories.json";
 		}
 
 		// Leer el archivo JSON
@@ -38,6 +38,27 @@ namespace ExamenPOO.API.Services
 				Price = p.Price,
 				Amount = p.Amount,
 				Category = p.Category,
+			}).ToList();
+
+			return dtos;
+		}
+
+		public async Task<List<CategoryDto>> ReadCategoryFromFileAsync() // Leer las categorias
+		{
+			if (!File.Exists(_JSON_FILE_CATEGORIES))
+			{
+				return new List<CategoryDto>();
+			}
+
+			var json = await File.ReadAllTextAsync(_JSON_FILE_CATEGORIES);
+			var categories = JsonConvert.DeserializeObject<List<CategoryEntity>>(json);
+
+			// Convertir la lista de CategoryEntity a una lista de CategoryDto
+			var dtos = categories.Select(c => new CategoryDto
+			{
+				Id = c.Id,
+				Name = c.Name,
+				InventoryValue = c.InventoryValue,
 			}).ToList();
 
 			return dtos;
@@ -67,18 +88,9 @@ namespace ExamenPOO.API.Services
 			return products.FirstOrDefault(c => c.Id == id);
 		}
 
-		public async Task<bool> CreateAsync(ProductCreateDto dto/*, CategoryDto categoryDto*/)
+		public async Task<bool> CreateAsync(ProductCreateDto dto)
 		{
 			var productsDtos = await ReadProductsFromFileAsync();
-
-			// Validar que la categoria ingresada sea una categoria existente
-			//var categoriesDtos = await ReadCategoriesFromFileAsync();
-
-			//var existingCategory = categoriesDtos.FirstOrDefault(c => c.Name == categoryDto.Name);
-			//if (existingCategory is null)
-			//{
-			//	return false;
-			//}
 
 			var productDto = new ProductDto
 			{
@@ -88,6 +100,14 @@ namespace ExamenPOO.API.Services
 				Amount = dto.Amount,
 				Category = dto.Category,
 			};
+
+			// Validar si la categoria del producto ingresado existe
+			var categoriesDtos = await ReadCategoryFromFileAsync();
+			var productCategory = categoriesDtos.FirstOrDefault(c => c.Name == productDto.Category);
+			if (productCategory is null)
+			{
+				return false;
+			}
 
 			productsDtos.Add(productDto);
 
@@ -111,6 +131,14 @@ namespace ExamenPOO.API.Services
 
 			var existingProduct = productsDtos.FirstOrDefault(p => p.Id == id);
 			if (existingProduct is null)
+			{
+				return false;
+			}
+
+			// Validar si la categoria del producto ingresado existe
+			var categoriesDtos = await ReadCategoryFromFileAsync();
+			var productCategory = categoriesDtos.FirstOrDefault(c => c.Name == dto.Category);
+			if (productCategory is null)
 			{
 				return false;
 			}

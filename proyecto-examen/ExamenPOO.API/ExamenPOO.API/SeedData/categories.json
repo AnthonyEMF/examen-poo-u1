@@ -1,10 +1,12 @@
 [
   {
-    "Id": "b208c00a-84f4-43af-b151-5db8894e30d1",
-    "Name": "Vestimenta"
-  },
-  {
+    "InventoryValue": 0,
     "Id": "8c330b98-5ebe-44c4-a988-d445bafaa523",
     "Name": "Comestibles"
+  },
+  {
+    "InventoryValue": 5100,
+    "Id": "c37f3925-06e7-437c-9cb0-2fe1d75b9ec3",
+    "Name": "Vestimenta"
   }
 ]

@@ -17,9 +17,9 @@ namespace ExamenPOO.API.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult> GetAll()
+		public async Task<ActionResult> GetAll(/*CategoryDto dto*/)
 		{
-			return Ok(await _categoriesService.GetCategoriesAsync());
+			return Ok(await _categoriesService.GetCategoriesAsync(/*dto*/));
 		}
 
 		[HttpGet("{id}")]

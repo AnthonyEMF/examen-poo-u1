@@ -37,10 +37,9 @@ namespace ExamenPOO.API.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Create(ProductCreateDto dto/*, CategoryDto categoryDto*/)
+		public async Task<ActionResult> Create(ProductCreateDto dto)
 		{
-			// TODO
-			await _productsService.CreateAsync(dto/*, categoryDto.Name*/);
+			await _productsService.CreateAsync(dto);
 			return StatusCode(201);
 		}
 

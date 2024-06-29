@@ -7,7 +7,7 @@ namespace ExamenPOO.API.Services.Interfaces
 	{
 		Task<List<ProductDto>> GetProductsAsync();
 		Task<ProductDto> GetProductByIdAsync(Guid id);
-		Task<bool> CreateAsync(ProductCreateDto dto/*, CategoryDto categoryDto*/);
+		Task<bool> CreateAsync(ProductCreateDto dto);
 		Task<bool> EditAsync(ProductEditDto dto, Guid id);
 		Task<bool> DeleteAsync(Guid id);
 	}
