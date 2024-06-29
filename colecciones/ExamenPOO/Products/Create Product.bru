@@ -1,0 +1,19 @@
+meta {
+  name: Create Product
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://localhost:7101/api/products
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Playera",
+    "price": "200",
+    "amount": "5"
+  }
+}

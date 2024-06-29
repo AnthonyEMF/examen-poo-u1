@@ -1,0 +1,16 @@
+[
+  {
+    "Price": 500,
+    "Amount": 2,
+    "Category": "Vestimenta",
+    "Id": "fd23cef0-1db5-4427-8e18-573ff1976c16",
+    "Name": "Pantalon"
+  },
+  {
+    "Price": 200,
+    "Amount": 5,
+    "Category": "Vestimenta",
+    "Id": "5753c035-6ed6-4130-b8f9-f028e3538f38",
+    "Name": "Camiseta"
+  }
+]
